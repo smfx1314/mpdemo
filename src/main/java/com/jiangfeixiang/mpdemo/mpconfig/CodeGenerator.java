@@ -12,9 +12,7 @@ import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * @ProjectName: mybatis-plus
@@ -45,7 +43,9 @@ public class CodeGenerator {
     }
 
     public static void main(String[] args) {
-        // 代码生成器
+        /**
+         * 代码生成器
+         */
         AutoGenerator mpg = new AutoGenerator();
 
         /**
@@ -86,10 +86,6 @@ public class CodeGenerator {
         pc.setParent("com.jiangfeixiang.mpdemo");
         mpg.setPackageInfo(pc);
 
-        /**
-         * 模板配置
-         */
-
 
         /**
          * 自定义配置
@@ -101,10 +97,21 @@ public class CodeGenerator {
             }
         };
 
-        // 自定义输出配置
+        /**
+         * 模板
+         */
+        //如果模板引擎是 freemarker
+        String templatePath = "/templates/mapper.xml.ftl";
+        // 如果模板引擎是 velocity
+        // String templatePath = "/templates/mapper.xml.vm";
+
+
+        /**
+         * 自定义输出配置
+         */
         List<FileOutConfig> focList = new ArrayList<>();
         // 自定义配置会被优先输出
-        focList.add(new FileOutConfig("/templates/mapper.xml.ftl") {
+        focList.add(new FileOutConfig(templatePath) {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
@@ -112,17 +119,31 @@ public class CodeGenerator {
                         + "/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
             }
         });
-
         cfg.setFileOutConfigList(focList);
         mpg.setCfg(cfg);
-        mpg.setTemplate(new TemplateConfig().setXml(null));
 
-        // 策略配置
+        /**
+         * 配置模板
+         */
+        TemplateConfig templateConfig = new TemplateConfig();
+
+        // 配置自定义输出模板
+        //指定自定义模板路径，注意不要带上.ftl/.vm, 会根据使用的模板引擎自动识别
+        // templateConfig.setEntity("templates/entity2.java");
+        // templateConfig.setService();
+        // templateConfig.setController();
+
+        templateConfig.setXml(null);
+        mpg.setTemplate(templateConfig);
+
+        /**
+         * 策略配置
+         */
         StrategyConfig strategy = new StrategyConfig();
         //设置命名格式
         strategy.setNaming(NamingStrategy.underline_to_camel);
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
-        strategy.setInclude(scanner("表名，多个英文逗号分割").split(","));
+        strategy.setInclude(scanner("表名,多个英文逗号分割").split(","));
         //实体是否为lombok模型（默认 false）
         strategy.setEntityLombokModel(true);
         //生成 @RestController 控制器
@@ -141,5 +162,4 @@ public class CodeGenerator {
         mpg.setTemplateEngine(new FreemarkerTemplateEngine());
         mpg.execute();
     }
-
 }
