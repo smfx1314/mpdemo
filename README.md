@@ -1,0 +1,2 @@
+# mpdemo
+springboot整合mybatis-plus实现逆向工程以及数据增删改成基本功能
