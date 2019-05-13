@@ -7,3 +7,13 @@ spring:
     name: mp
     password: 1234
     username: root
+
+
+
+
+
+# 指定全局配置文件
+mybatis-plus:
+  #config-location: classpath:mybatis-config.xml
+  # 指定mapper.xml文件
+  mapper-locations: classpath*:mybatis/*.xml
